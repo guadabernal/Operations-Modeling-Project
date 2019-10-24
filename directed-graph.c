@@ -53,16 +53,21 @@ void graph_int_push_back( graph_int_t* this, size_t value, char name[] )
   new_node->value = value;
   new_node->edges = 0;
   memcpy(new_node->name, name, 6);
-  printf( "     created new node called  %s  ", new_node->name);
-  printf( "     with a value of  %zu\n", new_node->value);
+  printf( "     created new node  %s  ", new_node->name);
+  printf( "     with value %zu\n", new_node->value);
 
   // Update graph values
   this->sink_node = new_node;
   this->node_list[this->nodes_size] = new_node;
   this->nodes_size++;
-  printf( "     size of graph is  %zu  \n", this->nodes_size);
-  printf( "     in list new node is  %s  ", this->node_list[this->nodes_size - 1]->name);
-  printf( "     with a value of  %zu\n", this->node_list[this->nodes_size - 1]->value);
+  if( this->nodes_size == 2 ){
+    printf( "  **  - Value: %zu \n", this->node_list[0]->value );
+    printf( "  **  - Value: %zu \n", this->node_list[1]->value );
+  }
+
+  printf( "     size of graph = %zu  \n", this->nodes_size);
+  printf( "     list -> new node  %s  ", this->node_list[this->nodes_size - 1]->name);
+  printf( "     with value = %zu\n\n\n", this->node_list[this->nodes_size - 1]->value);
 }
 
 //------------------------------------------------------------------------
@@ -118,15 +123,21 @@ size_t graph_int_size( graph_int_t* this )
 
 void graph_int_print( graph_int_t* this )
 {
+
+  printf( "  **  - Value: %zu \n", this->node_list[0]->value );
+  printf( "  **  - Value: %zu \n", this->node_list[1]->value );
+
   // Iterrate through the nodes in list printing their value and  edges
   for( size_t i = 0; i < this->nodes_size; i++ ){
     printf( "    - Node : %s  ", this->node_list[i]->name );
+    printf( "    - i : %zu  ", i );
     printf( "    - Value: %zu \n", this->node_list[i]->value );
+
+    // Iterrate through edges in current node
     for( size_t j = 0; j < this->node_list[i]->edges; j++ ){
-      printf ( "        Edge from  %s  to  %s  with cost of  %zu \n",
-          this->node_list[i]->name,
-          this->node_list[i]->e_list[j]->next->name,
-          this->node_list[i]->e_list[j]->cost );
+      printf( "        Edge from  %s  ", this->node_list[i]->name );
+      printf( "to  %s  ", this->node_list[i]->e_list[j]->next->name );
+      printf( "with cost of  %zu \n", this->node_list[i]->e_list[j]->cost );
     }
   }
   printf("\n");
@@ -144,7 +155,7 @@ int main(){
   printf("  3. Printing Graph\n");
   graph_int_print( &graph1 );
 
-  printf("  4. Adding Edge\n ");
+  printf("  4. Adding Edge\n");
   graph_int_add_edge( &graph1, 15, "node A", "node B");
 
   printf("  5. Printing Graph\n");
