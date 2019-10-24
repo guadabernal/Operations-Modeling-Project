@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "directed-graph.h"
 
 //------------------------------------------------------------------------
@@ -27,17 +28,77 @@ void graph_int_construct( graph_int_t* this )
 void graph_int_destruct( graph_int_t* this )
 {
   // free the edges inside of each node
-  for( int i = 0; i < this->nodes_size; i++) {
-    free(this->node_list[i]->e_list);
+  for( size_t i = 0; i < this->nodes_size; i++) {
+    for( size_t j = 0; j < this->node_list[i]->edges; j++) {
+      edge_t* temp = this->node_list[i]->e_list[j];
+      free( temp );
+    }
   }
-
-  // free the list of nodes
-  free ( this->node_list );
 
   // Reset values in this
   this->nodes_size = 0;
   this->source_node = NULL;
   this->sink_node = NULL;
+}
+
+//------------------------------------------------------------------------
+// graph_int_push_back
+//------------------------------------------------------------------------
+// Push a new node into the graph
+
+void graph_int_push_back( graph_int_t* this, size_t value, char name[] )
+{
+  // Creates a new node and assigns its 'value' field value
+  node_t* new_node = ( node_t* ) malloc ( sizeof ( node_t ) );
+  new_node->value = value;
+  new_node->edges = 0;
+  memcpy(new_node->name, name, 6);
+  printf( "     created new node called  %s  ", new_node->name);
+  printf( "     with a value of  %zu\n", new_node->value);
+
+  // Update graph values
+  this->sink_node = new_node;
+  this->node_list[this->nodes_size] = new_node;
+  this->nodes_size++;
+  printf( "     size of graph is  %zu  \n", this->nodes_size);
+  printf( "     in list new node is  %s  ", this->node_list[this->nodes_size - 1]->name);
+  printf( "     with a value of  %zu\n", this->node_list[this->nodes_size - 1]->value);
+}
+
+//------------------------------------------------------------------------
+// graph_int_add_edge
+//------------------------------------------------------------------------
+// Adds a new edge into the graph
+
+void graph_int_add_edge( graph_int_t* this, size_t cost, char f_node[], char t_node[] )
+{
+  if( f_node == t_node ) printf("ERROR: Invalid Edge \n");
+
+  // Creates a new edge and assigns its 'cost' field value
+  edge_t* edge = ( edge_t* ) malloc ( sizeof ( edge_t ) );
+  edge->cost = cost;
+
+  // Add new edge pointers
+  for( size_t i = 0; i < this->nodes_size; i++ ){
+    if( strcmp( f_node, this->node_list[i]->name ) == 0 ) {
+      this->node_list[i]->e_list[this->node_list[i]->edges] = edge;
+      this->node_list[i]->edges++;
+    }
+    if( strcmp( t_node, this->node_list[i]->name ) == 0 ) {
+      edge->next = this->node_list[i];
+    }
+  }
+}
+
+//------------------------------------------------------------------------
+// list_int_at
+//------------------------------------------------------------------------
+// Pointer chase and return the value at the given index
+// If the index is out of bound, then return 0.
+
+int graph_int_value_at( graph_int_t* this, char node[] )
+{
+  return 0;
 }
 
 //------------------------------------------------------------------------
@@ -51,62 +112,6 @@ size_t graph_int_size( graph_int_t* this )
 }
 
 //------------------------------------------------------------------------
-// graph_int_push_back
-//------------------------------------------------------------------------
-// Push a new node into the graph
-
-void graph_int_push_back( graph_int_t* this, int value )
-{
-  // Creates a new node and assigns its 'value' field value
-  node_t* new_node = ( node_t* ) ece2400_malloc ( sizeof ( node_t ) );
-  new_node->value = value;
-
-  // Assign values to the new node's pointer variables. If the tail_ptr is not null
-  // then tail_ptr->next_ptr must be re-assigned before the tail_ptr is moved to the new_node
-  if ( this->tail_ptr != NULL ) {
-    this->tail_ptr->next_ptr  = new_node;
-    new_node->prev_ptr        = this->tail_ptr;
-  }
-  else {
-    new_node->prev_ptr = NULL;
-  }
-  new_node->next_ptr = NULL;
-
-  // Modifies the 'this' tail pointer and if necessary, (in the case that this is
-  // the first node) the head_ptr, to point at the new node as well
-  this->tail_ptr = new_node;
-  if ( this->head_ptr == NULL ) this->head_ptr = new_node;
-
-  // Increment the size of the list
-  this->size++;
-}
-
-//------------------------------------------------------------------------
-// list_int_at
-//------------------------------------------------------------------------
-// Pointer chase and return the value at the given index
-// If the index is out of bound, then return 0.
-
-// int list_int_at( list_int_t* this, size_t idx )
-// {
-//   // Checks if the index is larger than the size and returns 0
-//   if( idx >= this->size ) {
-//     return 0;
-//   }
-//
-//   // Iterates through idx nodes with the temp variable and returns
-//   // the value at the idx index
-//   node_t* temp;
-//
-//   temp = this->head_ptr;
-//   for( size_t i = 0; i < idx; i++ ){
-//     temp = temp->next_ptr;
-//   }
-//
-//   return (int)temp->value;
-// }
-
-//------------------------------------------------------------------------
 // graph_int_print
 //------------------------------------------------------------------------
 // Print out the content of graph_int_t.
@@ -115,10 +120,10 @@ void graph_int_print( graph_int_t* this )
 {
   // Iterrate through the nodes in list printing their value and  edges
   for( size_t i = 0; i < this->nodes_size; i++ ){
-    printf ( "    Node : %s  Value: %zu \n", this->node_list[i]->name,
-        this->node_list[i]->value );
+    printf( "    - Node : %s  ", this->node_list[i]->name );
+    printf( "    - Value: %zu \n", this->node_list[i]->value );
     for( size_t j = 0; j < this->node_list[i]->edges; j++ ){
-      printf ( "        Edge from: %s  To: %s Cost: %zu \n",
+      printf ( "        Edge from  %s  to  %s  with cost of  %zu \n",
           this->node_list[i]->name,
           this->node_list[i]->e_list[j]->next->name,
           this->node_list[i]->e_list[j]->cost );
@@ -127,9 +132,26 @@ void graph_int_print( graph_int_t* this )
   printf("\n");
 }
 
-
-
 int main(){
-  printf("\n\nhey you made it!!\n ");
+  printf("  1. Constructing\n");
+  graph_int_t graph1;
+  graph_int_construct( &graph1 );
 
+  printf("  2. Adding a node\n");
+  graph_int_push_back( &graph1, 7, "node A");
+  graph_int_push_back( &graph1, 3, "node B");
+
+  printf("  3. Printing Graph\n");
+  graph_int_print( &graph1 );
+
+  printf("  4. Adding Edge\n ");
+  graph_int_add_edge( &graph1, 15, "node A", "node B");
+
+  printf("  5. Printing Graph\n");
+  graph_int_print( &graph1 );
+
+  printf("  6. Destructing\n");
+  graph_int_destruct( &graph1 );
+
+  printf("\nhey you made it!!\n");
 }
