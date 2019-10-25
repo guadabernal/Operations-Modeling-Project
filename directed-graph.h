@@ -8,19 +8,21 @@
 #ifndef DIRECTED_GRAPH_H
 #define DIRECTED_GRAPH_H
 
+#define MAXNAME 255
+
 struct node_t;
 struct edge_t;
 struct graph_int_t;
 
 typedef struct node_t {
-  size_t          value;      // value of the node
-  size_t          edges;      // Number of edges
-  char            name[255];  // Name of node
-  struct edge_t*  e_list[];   // List of edges
+  int             value;          // value of the node
+  size_t          edges;          // Number of edges
+  char            name[MAXNAME];  // Name of node
+  struct edge_t*  e_list[];       // List of edges
 } node_t;
 
 typedef struct edge_t {
-  size_t  cost;   // Cost of edge
+  int     cost;   // Cost of edge
   node_t* next;   // Where edge points
 } edge_t;
 
@@ -34,8 +36,8 @@ typedef struct graph_int_t{
 void   graph_int_construct ( graph_int_t* this );
 void   graph_int_destruct  ( graph_int_t* this );
 
-void   graph_int_push_back ( graph_int_t* this, size_t value, char name[] );
-void   graph_int_add_edge  ( graph_int_t* this, size_t cost, char f_node[], char t_node[] );
+void   graph_int_push_back ( graph_int_t* this, int value, char name[] );
+void   graph_int_add_edge  ( graph_int_t* this, int cost, char f_node[], char t_node[] );
 
 int    graph_int_value_at  ( graph_int_t* this, char node[]);
 size_t graph_int_size      ( graph_int_t* this );
