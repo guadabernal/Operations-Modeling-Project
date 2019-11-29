@@ -3,7 +3,6 @@
 #include <string.h>
 #include "directed-graph.h"
 
-
 int main(){
   printf("  1. Constructing\n");
   graph_int_t graph1;

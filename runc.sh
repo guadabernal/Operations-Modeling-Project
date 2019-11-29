@@ -1,3 +1,2 @@
-rm test
-clang main.c directed-graph.c -g  -o test
+clang sample/main.c source/directed-graph.c -I include -g  -o test
 ./test
