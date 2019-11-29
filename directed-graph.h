@@ -15,10 +15,11 @@ struct edge_t;
 struct graph_int_t;
 
 typedef struct node_t {
-  int             value;          // value of the node
-  size_t          edges;          // Number of edges
-  char            name[MAXNAME];  // Name of node
-  struct edge_t*  e_list[];       // List of edges
+  int              value;          // value of the node
+  size_t           edges_size;     // Number of edges
+  size_t           edges_cap;      // capacity of edges
+  char             name[MAXNAME];  // Name of node
+  struct edge_t**  edges;         // List of edges
 } node_t;
 
 typedef struct edge_t {
@@ -27,10 +28,12 @@ typedef struct edge_t {
 } edge_t;
 
 typedef struct graph_int_t{
-  size_t  nodes_size;
   node_t* source_node;
   node_t* sink_node;
-  node_t* node_list[];
+
+  node_t** nodes;
+  size_t  nodes_size;
+  size_t  nodes_cap;
 } graph_int_t;
 
 void   graph_int_construct ( graph_int_t* this );
