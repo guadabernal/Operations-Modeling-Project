@@ -83,7 +83,10 @@ void graph_int_push_back( graph_int_t* this, int value, char name[] )
 
 void graph_int_add_edge( graph_int_t* this, int cost, char f_node[], char t_node[] )
 {
-  if( f_node == t_node ) printf("ERROR: Invalid Edge \n");
+  if( f_node == t_node ) {
+    printf("ERROR: Invalid Edge \n");
+    return ;
+  }
 
   // Creates a new edge and assigns its 'cost' field value
   edge_t* edge = ( edge_t* ) malloc ( sizeof ( edge_t ) );
@@ -105,13 +108,51 @@ void graph_int_add_edge( graph_int_t* this, int cost, char f_node[], char t_node
 }
 
 //------------------------------------------------------------------------
+// graph_int_set_source
+//------------------------------------------------------------------------
+// Set the source using the name
+
+void graph_int_set_source ( graph_int_t* this, char name[] )
+{
+  // Iterrate through the nodes in list, if name matches set
+  for( size_t i = 0; i < this->nodes_size; i++ ){
+    if( strcmp( this->nodes[i]->name, name ) == 0 ) {
+      this->source_node = this->nodes[i];
+    }
+  }
+}
+
+//------------------------------------------------------------------------
+// graph_int_set_sink
+//------------------------------------------------------------------------
+// Set the sink using the name
+
+void graph_int_set_sink ( graph_int_t* this, char name[] )
+{
+  // Iterrate through the nodes in list, if name matches set
+  for( size_t i = 0; i < this->nodes_size; i++ ){
+    if( strcmp( this->nodes[i]->name, name ) == 0 ) {
+      this->sink_node = this->nodes[i];
+    }
+  }
+}
+
+//------------------------------------------------------------------------
 // list_int_at
 //------------------------------------------------------------------------
 // Pointer chase and return the value at the given index
 // If the index is out of bound, then return 0.
 
-int graph_int_value_at( graph_int_t* this, char node[] )
+int graph_int_value_at( graph_int_t* this, char name[] )
 {
+  // Iterrate through the nodes in list
+  for( size_t i = 0; i < this->nodes_size; i++ ){
+    if( strcmp( this->nodes[i]->name, name ) == 0 ) {
+      return this->nodes[i]->value;
+    }
+  }
+
+  printf("ERROR: Invalid Name \n");
   return 0;
 }
 
@@ -132,17 +173,20 @@ size_t graph_int_size( graph_int_t* this )
 
 void graph_int_print( graph_int_t* this )
 {
-  // Iterrate through the nodes in list printing their value and  edges
+  // Iterrate through the nodes in list printing their value and edges
   for( size_t i = 0; i < this->nodes_size; i++ ){
-    printf( "    - Node : %s  ", this->nodes[i]->name );
+    if ( this->nodes[i] == this->source_node )
+      printf( "    - SNode : %s  ", this->nodes[i]->name );
+    else if ( this->nodes[i] == this->sink_node )
+      printf( "    - TNode : %s  ", this->nodes[i]->name );
+    else
+      printf( "    -  Node : %s  ", this->nodes[i]->name );
     printf( "    - Value: %d \n", this->nodes[i]->value );
-
     // Iterrate through edges in current node
     for( size_t j = 0; j < this->nodes[i]->edges_size; j++ ){
-      printf( "        Edge from  %s  ", this->nodes[i]->name );
+      printf( "         Edge from  %s  ", this->nodes[i]->name );
       printf( "to  %s  ", this->nodes[i]->edges[j]->next->name );
       printf( "with cost of  %d \n", this->nodes[i]->edges[j]->cost );
     }
   }
-  printf("\n");
 }

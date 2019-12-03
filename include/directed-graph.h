@@ -41,8 +41,10 @@ void   graph_int_destruct  ( graph_int_t* this );
 
 void   graph_int_push_back ( graph_int_t* this, int value, char name[] );
 void   graph_int_add_edge  ( graph_int_t* this, int cost, char f_node[], char t_node[] );
+void   graph_int_set_source ( graph_int_t* this, char name[] );
+void   graph_int_set_sink ( graph_int_t* this, char name[] );
 
-int    graph_int_value_at  ( graph_int_t* this, char node[]);
+int    graph_int_value_at  ( graph_int_t* this, char name[]);
 size_t graph_int_size      ( graph_int_t* this );
 void   graph_int_print     ( graph_int_t* this );
 
