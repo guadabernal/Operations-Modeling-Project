@@ -36,8 +36,7 @@ int main(){
 
   // Calcluate the minimum tree from source to sink
   printf( "\n   ----- Implementing Nearest Neighbor Heuristic ----- \n\n" );
-
-
+  nn_shortest_path( &graph1 );
 
   printf( "   Destructing Graph\n" );
   graph_int_destruct( &graph1 );

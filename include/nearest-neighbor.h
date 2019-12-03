@@ -8,17 +8,12 @@
 #ifndef NEAREST_NEIGHBOR_H
 #define NEAREST_NEIGHBOR_H
 
-// struct node_t;
+#include "directed-graph.h"
 
-// typedef struct node_t {
-//   int              value;          // value of the node
-//   size_t           edges_size;     // Number of edges
-//   size_t           edges_cap;      // capacity of edges
-//   char             name[MAXNAME];  // Name of node
-//   struct edge_t**  edges;         // List of edges
-// } node_t;
 
-// void   graph_int_construct ( graph_int_t* this );
-// void   graph_int_destruct  ( graph_int_t* this );
+edge_t**  sorted_nodes;         // List of ordered sorted nodes
+edge_t**  sorted_edges;         // List of ordered sorted edges
+
+void nn_shortest_path ( graph_int_t* this );
 
 #endif // NEAREST_NEIGHBOR_H
