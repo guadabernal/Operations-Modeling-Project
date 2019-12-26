@@ -21,10 +21,12 @@ Algorithms to be implemented: ( in progress )
     Nearest Neighbor Heuristic:
 
         Returns list of edges that make up the shortest path
+        
 
     Dijkstra's Algorithm:
 
         Returns list of edges that make up the shortest path tree from
+        
 
     Ford-Fulkerson Algorithm:
 
