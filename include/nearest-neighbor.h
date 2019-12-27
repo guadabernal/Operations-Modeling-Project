@@ -11,9 +11,19 @@
 #include "directed-graph.h"
 
 
-edge_t**  sorted_nodes;         // List of ordered sorted nodes
+node_t**  sorted_nodes;         // List of ordered sorted nodes
 edge_t**  sorted_edges;         // List of ordered sorted edges
+size_t    sorted_nodes_size;
+size_t    edges_size;           // Number of edges
 
-void nn_shortest_path ( graph_int_t* this );
+// Calculates sorted nodes and edges
+void nn_shortest_path_fc ( graph_int_t* this );
+
+// Prints graph
+void nn_shortest_path_print( graph_int_t* this );
+
+// Returns nodes and edges
+void nn_shortest_path_nodes( node_t**  nodes );
+void nn_shortest_path_edges( edge_t**  edges );
 
 #endif // NEAREST_NEIGHBOR_H
