@@ -17,7 +17,9 @@ size_t    sorted_nodes_size;
 size_t    edges_size;           // Number of edges
 
 // Calculates sorted nodes and edges
+// _c =  connected _fc = fully connected
 void nn_shortest_path_fc ( graph_int_t* this );
+void nn_shortest_path_c ( graph_int_t* this );
 
 // Prints graph
 void nn_shortest_path_print( graph_int_t* this );

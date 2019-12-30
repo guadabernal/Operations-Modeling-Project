@@ -180,7 +180,7 @@ void graph_int_print( graph_int_t* this )
     else if ( this->nodes[i] == this->sink_node )
       printf( "    - TNode : %s  ", this->nodes[i]->name );
     else
-      printf( "    -  Node : %s  ", this->nodes[i]->name );
+      printf( "    - Node : %s  ", this->nodes[i]->name );
     printf( "    - Value: %d \n", this->nodes[i]->value );
     // Iterrate through edges in current node
     for( size_t j = 0; j < this->nodes[i]->edges_size; j++ ){
